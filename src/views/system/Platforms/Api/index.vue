@@ -179,9 +179,14 @@ watch(
 
 <style lang="less" scoped>
 .api-page-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
   .content {
     background-color: #fff;
     margin: 0 !important;
+    flex: 1 1 0;
 
     .tree-content {
       padding-bottom: 30px;

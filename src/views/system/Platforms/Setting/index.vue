@@ -1,5 +1,6 @@
 <template>
   <j-page-container>
+    <FullPage :fixed="false">
     <div class="api-container">
       <Api mode="api">
         <template #top>
@@ -13,6 +14,7 @@
         </template>
       </Api>
     </div>
+    </FullPage>
   </j-page-container>
 </template>
 
@@ -22,7 +24,7 @@ import Api from '../Api/index.vue';
 
 <style lang="less" scoped>
 .api-container {
-  background-color: #fff;
+  height: 100%;
   padding: 24px;
 }
 

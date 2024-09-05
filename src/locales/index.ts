@@ -12,7 +12,6 @@ const messages = {
 const language = (navigator.language || 'en').toLocaleLowerCase() // 这是获取浏览器的语言
 
 const i18n = createI18n({
-  legacy: false,
   silentTranslationWarn: true,
   locale: localStorage.getItem('lang') || language.split('-')[0] || 'en',
   fallbackLocale: language,
