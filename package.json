@@ -11,6 +11,7 @@
     "update": "git submodule update"
   },
   "dependencies": {
+    "@ant-design/icons-vue": "^7.0.1",
     "@fullcalendar/core": "^6.1.15",
     "@fullcalendar/daygrid": "^6.1.15",
     "@fullcalendar/interaction": "^6.1.15",
