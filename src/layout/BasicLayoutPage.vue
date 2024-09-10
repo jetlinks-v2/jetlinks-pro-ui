@@ -22,10 +22,11 @@
         <User />
       </div>
     </template>
-
-      <router-view v-slot="{ Component }">
-        <component :is="components || Component" />
-      </router-view>
+      <slot>
+        <router-view v-slot="{ Component }">
+          <component :is="components || Component" />
+        </router-view>
+      </slot>
   </j-pro-layout>
 </template>
 
