@@ -14,14 +14,14 @@
 </template>
 
 <script setup lang="ts" name="Department">
-import LeftTree from './components/LeftTree.vue'
-import User from './user/index.vue'
+import LeftTree from './components/LeftTree.vue';
+import User from './user/index.vue';
 
-const departmentId = ref<string>('')
+const departmentId = ref<string>('');
 
 const onChange = (id: string) => {
-  departmentId.value = id
-}
+  departmentId.value = id;
+};
 </script>
 
 <style lang="less" scoped>
@@ -34,13 +34,13 @@ const onChange = (id: string) => {
   .left {
     border-right: 1px solid #f0f0f0;
     padding-right: 24px;
-    flex:1;
-    height:100%
+    flex: 1;
+    height: 100%;
   }
 
   .right {
-    flex:4;
-    height:100%
+    flex: 4;
+    height: 100%;
   }
 }
 </style>

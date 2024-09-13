@@ -21,21 +21,13 @@
                   }"
                 />
               </template>
-              <a-collapse-panel
-                v-for="item in dataSource"
-                :key="item.provider"
-                :header="item.name"
-              >
+              <a-collapse-panel v-for="item in dataSource" :key="item.provider" :header="item.name">
                 <div>
                   <template v-for="child in item.children" :key="child.id">
                     <Item
                       @refresh="handleSearch"
                       :data="child"
-                      :subscribe="
-                        subscribe.find(
-                          (i) => i?.topicProvider === child?.provider,
-                        )
-                      "
+                      :subscribe="subscribe.find(i => i?.topicProvider === child?.provider)"
                     />
                   </template>
                 </div>
@@ -50,70 +42,68 @@
 </template>
 
 <script lang="ts" setup>
-import { getAllNotice } from '@/api/account/center'
-import { getNoticeList_api } from '@/api/account/notificationSubscription'
-import { getInitData } from '../data'
-import Item from './components/Item.vue'
-import { useMenuStore } from '@/store/menu'
+import { getAllNotice } from '@/api/account/center';
+import { getNoticeList_api } from '@/api/account/notificationSubscription';
+import { getInitData } from '../data';
+import Item from './components/Item.vue';
+import { useMenuStore } from '@/store/menu';
 
-const menuStore = useMenuStore()
-const subscribe = ref<any[]>([])
-const dataSource = ref<any[]>([])
-const activeKey = ref<string[]>()
-const loading = ref<boolean>(false)
-let initData: any[]
+const menuStore = useMenuStore();
+const subscribe = ref<any[]>([]);
+const dataSource = ref<any[]>([]);
+const activeKey = ref<string[]>();
+const loading = ref<boolean>(false);
+let initData: any[];
 const handleSearch = () => {
-  loading.value = true
+  loading.value = true;
   getAllNotice().then((resp: any) => {
     if (resp.status === 200) {
       const arr = initData
         .map((item: any) => {
           const _child = item.children.map((i: any) => {
-            const _item = (resp.result || []).find(
-              (t: any) => t?.provider === i?.provider,
-            )
+            const _item = (resp.result || []).find((t: any) => t?.provider === i?.provider);
             return {
               ...i,
               ..._item,
-            }
-          })
+            };
+          });
           return {
             ...item,
             children: _child,
-          }
+          };
         })
         .filter((it: any) => {
-          return it.children.filter((lt: any) => lt?.id)?.length
+          return it.children.filter((lt: any) => lt?.id)?.length;
         })
-        .map((item) => {
+        .map(item => {
           return {
             ...item,
             children: item.children.filter((lt: any) => lt?.id),
-          }
-        })
-      dataSource.value = arr
+          };
+        });
+      dataSource.value = arr;
     }
-  })
+  });
   getNoticeList_api()
     .then((resp: any) => {
       if (resp.status === 200) {
-        subscribe.value = resp?.result?.data || []
+        subscribe.value = resp?.result?.data || [];
       }
     })
     .finally(() => {
-      loading.value = false
-    })
-}
+      loading.value = false;
+    });
+};
 
 onMounted(() => {
-  const keys = ['alarm', 'system-monitor', 'system-business']
+  const keys = ['alarm', 'system-monitor', 'system-business'];
   if (menuStore.hasMenu('process')) {
-    keys.push('workflow-notification')
+    keys.push('workflow-notification');
   }
-  activeKey.value = keys
-  initData = getInitData()
-  handleSearch()
-})
+  activeKey.value = keys;
+  initData = getInitData();
+  handleSearch();
+});
 </script>
 
 <style lang="less" scoped>

@@ -3,8 +3,8 @@
     <div class="top">
       <h5>{{ props.selectApi.summary }}</h5>
       <div class="input">
-        <InputCard :value="props.selectApi.method"/>
-        <a-input :value="props.selectApi?.url" disabled/>
+        <InputCard :value="props.selectApi.method" />
+        <a-input :value="props.selectApi?.url" disabled />
         <span class="send" @click="send">发送</span>
       </div>
     </div>
@@ -15,59 +15,50 @@
         <div class="table" v-if="paramsTable.length">
           <a-form :model="requestBody.params" ref="formRef">
             <a-table
-                :columns="requestBody.tableColumns"
-                :dataSource="paramsTable"
-                :pagination="false"
-                size="small"
-                bordered
+              :columns="requestBody.tableColumns"
+              :dataSource="paramsTable"
+              :pagination="false"
+              size="small"
+              bordered
             >
               <template #bodyCell="{ column, record, index }">
                 <template v-if="column.key === 'name'">
                   <a-form-item
-                      :name="[
-                                            'paramsTable',
-                                            index +
-                                                (requestBody.pageNum - 1) *
-                                                    requestBody.pageSize,
-                                            'name',
-                                        ]"
-                      :rules="[
-                                            {
-                                                required: true,
-                                                message: '该字段是必填字段',
-                                            },
-                                        ]"
+                    :name="[
+                      'paramsTable',
+                      index + (requestBody.pageNum - 1) * requestBody.pageSize,
+                      'name',
+                    ]"
+                    :rules="[
+                      {
+                        required: true,
+                        message: '该字段是必填字段',
+                      },
+                    ]"
                   >
-                    <a-input
-                        v-model:value="record.name"
-                    ></a-input>
+                    <a-input v-model:value="record.name"></a-input>
                   </a-form-item>
                 </template>
                 <template v-else-if="column.key === 'value'">
                   <a-form-item
-                      :name="[
-                                            'paramsTable',
-                                            index +
-                                                (requestBody.pageNum - 1) *
-                                                    requestBody.pageSize,
-                                            'value',
-                                        ]"
+                    :name="[
+                      'paramsTable',
+                      index + (requestBody.pageNum - 1) * requestBody.pageSize,
+                      'value',
+                    ]"
                   >
-                    <a-input
-                        v-model:value="record.value"
-                    ></a-input>
+                    <a-input v-model:value="record.value"></a-input>
                   </a-form-item>
                 </template>
                 <template v-else-if="column.key === 'action'">
                   <j-permission-button
-                      type="text"
-                      :popConfirm="{
-                                            title: `确认删除`,
-                                            onConfirm: () =>
-                                                requestBody.clickDel(index),
-                                        }"
+                    type="text"
+                    :popConfirm="{
+                      title: `确认删除`,
+                      onConfirm: () => requestBody.clickDel(index),
+                    }"
                   >
-                    <AIcon type="DeleteOutlined"/>
+                    <AIcon type="DeleteOutlined" />
                   </j-permission-button>
                 </template>
               </template>
@@ -75,68 +66,59 @@
           </a-form>
 
           <div
-              class="pager"
-              v-if="
-                            requestBody.params.paramsTable.length > 10 &&
-                            requestBody.pageSize
-                        "
+            class="pager"
+            v-if="requestBody.params.paramsTable.length > 10 && requestBody.pageSize"
           >
-            <a-select
-                v-model:value="requestBody.pageNum"
-                style="width: 60px"
-            >
-              <a-select-option
-                  v-for="(val, i) in pageArr"
-                  :value="i + 1"
-              >{{ i + 1 }}
-              </a-select-option
-              >
+            <a-select v-model:value="requestBody.pageNum" style="width: 60px">
+              <a-select-option v-for="(_, i) in pageArr" :value="i + 1">
+                {{ i + 1 }}
+              </a-select-option>
             </a-select>
             <a-pagination
-                :pageSize="requestBody.pageSize"
-                v-model:current="requestBody.pageNum"
-                :total="requestBody.params.paramsTable.length"
-                hideOnSinglePage
-                style="text-align: center"
+              :pageSize="requestBody.pageSize"
+              v-model:current="requestBody.pageNum"
+              :total="requestBody.params.paramsTable.length"
+              hideOnSinglePage
+              style="text-align: center"
             />
           </div>
           <a-button
-              type="dashed"
-              @click="requestBody.addRow"
-              style="width: 100%; text-align: center; margin-top: 5px"
+            type="dashed"
+            @click="requestBody.addRow"
+            style="width: 100%; text-align: center; margin-top: 5px"
           >
-            <AIcon type="PlusOutlined"/>
+            <AIcon type="PlusOutlined" />
             新增
           </a-button>
         </div>
         <a-monaco-editor
-            v-if="showRequestBody"
-            ref="editorRef"
-            language="json"
-            style="height: 100% ; min-height: 200px;"
-            theme="vs"
-            v-model:modelValue="requestBody.code"
+          v-if="showRequestBody"
+          ref="editorRef"
+          language="json"
+          style="height: 100%; min-height: 200px"
+          theme="vs"
+          v-model:modelValue="requestBody.code"
         />
       </div>
     </div>
     <div class="api-card">
       <h5>响应参数</h5>
       <div class="content">
-        <JsonViewer :value="responsesContent" copyable/>
+        <JsonViewer :value="responsesContent" copyable />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import {JsonViewer} from 'vue3-json-viewer';
+import { JsonViewer } from 'vue3-json-viewer';
 import 'vue3-json-viewer/dist/index.css';
-import type {apiDetailsType} from '../typing';
+import type { apiDetailsType } from '../typing';
 import InputCard from './InputCard.vue';
-import {cloneDeep, toLower} from 'lodash-es';
-import {FormInstance} from 'ant-design-vue';
-import {request} from '@jetlinks-web/core'
-import {findData, getCodeText} from '../utils';
+import { cloneDeep, toLower } from 'lodash-es';
+import { FormInstance } from 'ant-design-vue';
+import { request } from '@jetlinks-web/core';
+import { findData, getCodeText } from '../utils';
 
 const props = defineProps<{
   selectApi: apiDetailsType;
@@ -145,8 +127,8 @@ const props = defineProps<{
 const responsesContent = ref({});
 const editorRef = ref();
 const formRef = ref<FormInstance>();
-const method = ref()
-const showRequestBody = ref(!!props.selectApi?.requestBody)
+const method = ref();
+const showRequestBody = ref(!!props.selectApi?.requestBody);
 const requestBody = reactive({
   tableColumns: [
     {
@@ -172,16 +154,13 @@ const requestBody = reactive({
   pageSize: 10,
   pageNum: 1,
   params: {
-    paramsTable: cloneDeep(
-        props.selectApi.parameters || [],
-    ) as requestObj[],
+    paramsTable: cloneDeep(props.selectApi.parameters || []) as requestObj[],
   },
 
   code: '',
 
   addRow: () => {
-    if (paramsTable.value.length === 10)
-      requestBody.pageNum = requestBody.pageNum + 1;
+    if (paramsTable.value.length === 10) requestBody.pageNum = requestBody.pageNum + 1;
     requestBody.params.paramsTable.push({
       name: '',
       value: '',
@@ -203,7 +182,7 @@ let schema: any = {};
 const refStr = ref('');
 
 const init = () => {
-  method.value = props.selectApi.method
+  method.value = props.selectApi.method;
   // if (!props.selectApi.requestBody) return;
   // schema = props.selectApi.requestBody.content['application/json'].schema;
   // refStr.value = schema.$ref || schema?.items?.$ref;
@@ -211,12 +190,13 @@ const init = () => {
 init();
 
 const send = () => {
-  if (paramsTable.value.length)
-    formRef.value &&
-    formRef.value.validate().then(() => {
+  if (paramsTable.value.length) {
+    formRef.value?.validate().then(() => {
       _send();
     });
-  else _send();
+  } else {
+    _send();
+  }
 };
 const _send = () => {
   const methodName = toLower(props.selectApi.method);
@@ -229,12 +209,11 @@ const _send = () => {
   };
 
   let url = props.selectApi?.url;
-  let params
+  let params;
   const urlParams = {};
-  requestBody.params.paramsTable.forEach((item) => {
+  requestBody.params.paramsTable.forEach(item => {
     urlParams[item.name] = item.value;
-    if (url.includes(`{${item.name}}`))
-      url = url.replace(`{${item.name}}`, item.value);
+    if (url.includes(`{${item.name}}`)) url = url.replace(`{${item.name}}`, item.value);
   });
   if (methodName === 'get') {
     params = {
@@ -242,7 +221,7 @@ const _send = () => {
       ...urlParams,
     };
   } else {
-    params = JSON.parse(requestBody.code || '{}')
+    params = JSON.parse(requestBody.code || '{}');
   }
 
   request[methodObj[methodName]](url, params).then((resp: any) => {
@@ -266,8 +245,8 @@ function getDefaultParams() {
   const tableData = findData(props.schemas, schemaName);
 
   return type === 'array'
-      ? [getCodeText(props.schemas, tableData, 3)]
-      : getCodeText(props.schemas, tableData, 3);
+    ? [getCodeText(props.schemas, tableData, 3)]
+    : getCodeText(props.schemas, tableData, 3);
 }
 
 type requestObj = {
@@ -275,9 +254,7 @@ type requestObj = {
   value: string;
 };
 const pageArr = computed(() => {
-  const maxPageNum = Math.ceil(
-      requestBody.params.paramsTable.length / requestBody.pageSize,
-  );
+  const maxPageNum = Math.ceil(requestBody.params.paramsTable.length / requestBody.pageSize);
   return new Array(maxPageNum).fill(1);
 });
 </script>

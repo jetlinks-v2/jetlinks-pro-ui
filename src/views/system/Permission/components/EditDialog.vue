@@ -54,12 +54,7 @@
             {{ `#${index + 1}.` }}
           </template>
           <template v-else-if="column.key === 'actions'">
-            <a-button
-              style="padding: 0"
-              type="link"
-              danger
-              @click="clickRemove(index)"
-            >
+            <a-button style="padding: 0" type="link" danger @click="clickRemove(index)">
               <AIcon type="DeleteOutlined" />
             </a-button>
           </template>
@@ -83,63 +78,55 @@
         </template>
       </a-table>
     </a-form>
-    <a-button
-      type="dashed"
-      style="width: 100%; margin-top: 5px"
-      @click="clickAdd"
-    >
-      <AIcon type="PlusOutlined" /> 添加
+    <a-button type="dashed" style="width: 100%; margin-top: 5px" @click="clickAdd">
+      <AIcon type="PlusOutlined" />
+      添加
     </a-button>
   </a-modal>
 </template>
 
 <script setup lang="ts" name="EditDialog">
-import {
-  checkId_api,
-  editPermission_api,
-  addPermission_api,
-} from '@/api/system/permission'
-import { useRequest } from '@jetlinks-web/hooks'
-import { onlyMessage } from '@jetlinks-web/utils'
-import { editColumns, defaultAction } from '../util'
+import { checkId_api, editPermission_api, addPermission_api } from '@/api/system/permission';
+import { useRequest } from '@jetlinks-web/hooks';
+import { onlyMessage } from '@jetlinks-web/utils';
+import { editColumns, defaultAction } from '../util';
 
-const emits = defineEmits(['save', 'close'])
+const emits = defineEmits(['save', 'close']);
 
 const props = defineProps({
   data: {
     type: Object as PropType<any>,
     default: () => {},
   },
-})
+});
 
-const dialogTitle = computed(() => (props.data.id ? '编辑' : '新增'))
+const dialogTitle = computed(() => (props.data.id ? '编辑' : '新增'));
 
 // 表单相关
-const formRef = ref<any>()
+const formRef = ref<any>();
 
 const modelRef = reactive({
   name: '',
   id: '',
   actions: [...defaultAction],
-})
+});
 
 // 校验标识是否可用
 const idCheck = async (_rule: any, id: string): Promise<any> => {
-  if (!id) return Promise.resolve()
-  else if (id.length > 64) return Promise.reject('最多可输入64个字符')
-  else if (props.data.id && props.data.id === modelRef.id)
-    return Promise.resolve()
+  if (!id) return Promise.resolve();
+  else if (id.length > 64) return Promise.reject('最多可输入64个字符');
+  else if (props.data.id && props.data.id === modelRef.id) return Promise.resolve();
   else {
-    const resp: any = await checkId_api({ id })
-    if (resp.result.passed) return Promise.resolve()
-    else return Promise.reject(resp.result.reason)
+    const resp: any = await checkId_api({ id });
+    if (resp.result.passed) return Promise.resolve();
+    else return Promise.reject(resp.result.reason);
   }
-}
+};
 
 // 删除actions
 const clickRemove = (index: number) => {
-  modelRef.actions.splice(index, 1)
-}
+  modelRef.actions.splice(index, 1);
+};
 
 // 新增actions
 const clickAdd = () => {
@@ -147,22 +134,19 @@ const clickAdd = () => {
     action: '',
     name: '',
     describe: '',
-  })
-}
+  });
+};
 
 // 保存数据
-const { loading, run } = useRequest(
-  props.data?.id ? editPermission_api : addPermission_api,
-  {
-    immediate: false,
-    onSuccess(res) {
-      if (res.success) {
-        onlyMessage('操作成功')
-        emits('save')
-      }
-    },
+const { loading, run } = useRequest(props.data?.id ? editPermission_api : addPermission_api, {
+  immediate: false,
+  onSuccess(res) {
+    if (res.success) {
+      onlyMessage('操作成功');
+      emits('save');
+    }
   },
-)
+});
 
 const confirm = () => {
   formRef.value?.validate().then(() => {
@@ -170,18 +154,16 @@ const confirm = () => {
       ...props.data,
       ...modelRef,
       actions: modelRef.actions.filter((item: any) => item.action && item.name),
-    }
-    run(params)
-  })
-}
+    };
+    run(params);
+  });
+};
 
 // 初始化
 watchEffect(() => {
-  Object.assign(modelRef, props.data)
-  modelRef.actions = props.data?.id
-    ? [...props.data.actions]
-    : [...defaultAction]
-})
+  Object.assign(modelRef, props.data);
+  modelRef.actions = props.data?.id ? [...props.data.actions] : [...defaultAction];
+});
 </script>
 
 <style lang="less" scoped>

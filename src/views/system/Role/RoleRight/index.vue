@@ -1,11 +1,6 @@
 <template>
   <div class="role-container">
-    <pro-search
-      noMargin
-      :columns="columns"
-      target="system-role"
-      @search="handelSearch"
-    />
+    <pro-search noMargin :columns="columns" target="system-role" @search="handelSearch" />
     <div class="role-table">
       <j-pro-table
         ref="tableRef"
@@ -16,18 +11,15 @@
         :defaultParams="{
           sorts: [
             { name: 'createTime', order: 'desc' },
-            { name: 'id', order: 'desc' }
-          ]
+            { name: 'id', order: 'desc' },
+          ],
         }"
         :scroll="{ y: 'calc(100% - 60px)' }"
       >
         <template #headerLeftRender>
-          <j-permission-button
-            type="primary"
-            :hasPermission="`${permission}:add`"
-            @click="addRole"
-          >
-            <AIcon type="PlusOutlined" />新增
+          <j-permission-button type="primary" :hasPermission="`${permission}:add`" @click="addRole">
+            <AIcon type="PlusOutlined" />
+            新增
           </j-permission-button>
         </template>
 
@@ -67,25 +59,25 @@
 </template>
 
 <script setup lang="ts" name="RoleRight">
-import AddDialog from './components/AddDialog.vue'
-import { getRoleList_api, delRole_api } from '@/api/system/role'
-import { useMenuStore } from '@/store/menu'
-import { onlyMessage } from '@jetlinks-web/utils'
+import AddDialog from './components/AddDialog.vue';
+import { getRoleList_api, delRole_api } from '@/api/system/role';
+import { useMenuStore } from '@/store/menu';
+import { onlyMessage } from '@jetlinks-web/utils';
 const props = defineProps({
   groupId: {
     type: String,
     default: '',
   },
-})
-const permission = 'system/Role'
-const { jumpPage } = useMenuStore()
-const modalType = ref('add')
-const current = ref()
-const isSave = !!useRoute().query.save
-const queryParams = ref<any>({ terms: [] })
+});
+const permission = 'system/Role';
+const { jumpPage } = useMenuStore();
+const modalType = ref('add');
+const current = ref();
+const isSave = !!useRoute().query.save;
+const queryParams = ref<any>({ terms: [] });
 // 表格
-const tableRef = ref<Record<string, any>>()
-const dialogVisible = ref(isSave)
+const tableRef = ref<Record<string, any>>();
+const dialogVisible = ref(isSave);
 const columns = [
   {
     title: '标识',
@@ -124,12 +116,9 @@ const columns = [
     fixed: 'right',
     scopedSlots: true,
   },
-]
-const getActions = (
-  data: Partial<Record<string, any>>,
-  type: 'card' | 'table',
-) => {
-  if (!data) return []
+];
+const getActions = (data: Partial<Record<string, any>>, type: 'card' | 'table') => {
+  if (!data) return [];
   const actions = [
     {
       key: 'update',
@@ -139,9 +128,9 @@ const getActions = (
       },
       icon: 'EditOutlined',
       onClick: () => {
-        dialogVisible.value = true
-        modalType.value = 'edit'
-        current.value = data
+        dialogVisible.value = true;
+        modalType.value = 'edit';
+        current.value = data;
       },
     },
     {
@@ -155,7 +144,7 @@ const getActions = (
           params: {
             id: data.id,
           },
-        })
+        });
       },
       icon: 'FormOutlined',
     },
@@ -168,26 +157,26 @@ const getActions = (
       popConfirm: {
         title: '确认删除?',
         onConfirm: async () => {
-          const res = await delRole_api(data.id)
+          const res = await delRole_api(data.id);
           if (res.status === 200) {
-            onlyMessage('操作成功!')
-            tableRef.value?.reload()
+            onlyMessage('操作成功!');
+            tableRef.value?.reload();
           } else {
-            onlyMessage('操作失败!', 'error')
+            onlyMessage('操作失败!', 'error');
           }
         },
       },
       icon: 'DeleteOutlined',
     },
-  ]
-  if (type === 'card') return actions.filter((i: any) => i.key !== 'view')
-  return actions
-}
+  ];
+  if (type === 'card') return actions.filter((i: any) => i.key !== 'view');
+  return actions;
+};
 
 const addRole = () => {
-  dialogVisible.value = true
-  modalType.value = 'add'
-}
+  dialogVisible.value = true;
+  modalType.value = 'add';
+};
 const handelSearch = (search: any) => {
   queryParams.value.terms = props.groupId
     ? [
@@ -198,11 +187,11 @@ const handelSearch = (search: any) => {
         },
         ...search.terms,
       ]
-    : [...search.terms]
-}
+    : [...search.terms];
+};
 watch(
   () => props.groupId,
-  (value) => {
+  value => {
     queryParams.value = value
       ? {
           terms: [
@@ -215,9 +204,9 @@ watch(
         }
       : {
           terms: [],
-        }
+        };
   },
-)
+);
 </script>
 
 <style lang="less" scoped>

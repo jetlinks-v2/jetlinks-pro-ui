@@ -9,32 +9,32 @@
         :confirm-loading="loading"
         @click="clickSave"
         style="margin-top: 24px"
-        >保存</a-button
       >
+        保存
+      </a-button>
     </section>
   </div>
 </template>
 
 <script setup lang="ts" name="RolePermiss">
-import PermissionTree from '../components/PermissionTree.vue'
+import PermissionTree from '../components/PermissionTree.vue';
 // import { USER_CENTER_MENU_DATA } from '@/views/init-home/data/baseMenu'
-import { updatePermissionTree_api } from '@/api/system/role'
-import { onlyMessage } from '@jetlinks-web/utils'
+import { updatePermissionTree_api } from '@/api/system/role';
+import { onlyMessage } from '@jetlinks-web/utils';
 
-const route = useRoute()
-const roleId = route.params.id as string
-const loading = ref(false)
-const menus = ref([]) // USER_CENTER_MENU_DATA
+const route = useRoute();
+const roleId = route.params.id as string;
+const loading = ref(false);
+const menus = ref([]); // USER_CENTER_MENU_DATA
 const clickSave = () => {
   updatePermissionTree_api(roleId, {
     menus: menus.value,
-  }).then((res:any)=>{
-    if(res.status === 200){
-        onlyMessage('操作成功')
+  }).then((res: any) => {
+    if (res.status === 200) {
+      onlyMessage('操作成功');
     }
-  })
-}
-
+  });
+};
 </script>
 
 <style lang="less" scoped>

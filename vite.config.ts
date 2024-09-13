@@ -14,6 +14,7 @@ import * as path from 'path'
 import monacoEditorPlugin from 'vite-plugin-monaco-editor'
 import { optimizeDeps } from './configs/plugin/optimize'
 import progress from 'vite-plugin-progress'
+import eslintPlugin from 'vite-plugin-eslint'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -68,6 +69,10 @@ export default defineConfig(({ mode }) => {
             }),
             createStyleImportPlugin({
                 resolves: [AndDesignVueResolve()],
+            }),
+            eslintPlugin({
+              include: ['src/**/*.js', 'src/**/*.vue', 'src/**/*.ts', 'src/**/*.tsx'],
+              cache: true
             }),
             progress(),
         ],

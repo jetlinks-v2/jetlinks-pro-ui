@@ -15,66 +15,60 @@
 </template>
 
 <script lang="ts" setup>
-import NotificationRecord from './components/NotificationRecord/index.vue'
-import { getInitData } from '../data'
-import { getAllNotice } from '@/api/account/center'
-import { useRouterParams } from '@jetlinks-web/hooks'
-import { useUserStore } from '@/store/user'
+import NotificationRecord from './components/NotificationRecord/index.vue';
+import { getInitData } from '../data';
+import { getAllNotice } from '@/api/account/center';
+import { useRouterParams } from '@jetlinks-web/hooks';
+import { useUserStore } from '@/store/user';
 
-const tabs = ref<any[]>([])
-const router = useRouterParams()
-const user = useUserStore()
-let initData: any[]
+const tabs = ref<any[]>([]);
+const router = useRouterParams();
+const user = useUserStore();
+let initData: any[];
 const queryTypeList = () => {
   getAllNotice().then((resp: any) => {
     if (resp.status === 200) {
       const arr = initData
         .map((item: any) => {
           const _child = item.children.map((i: any) => {
-            const _item = (resp.result || []).find(
-              (t: any) => t?.provider === i?.provider,
-            )
+            const _item = (resp.result || []).find((t: any) => t?.provider === i?.provider);
             return {
               ...i,
               ..._item,
-            }
-          })
+            };
+          });
           return {
             ...item,
             children: _child,
-          }
+          };
         })
         .filter((it: any) => {
-          return it.children.filter((lt: any) => lt?.id)?.length
+          return it.children.filter((lt: any) => lt?.id)?.length;
         })
-        .map((item) => {
+        .map(item => {
           return {
             ...item,
             children: item.children.filter((lt: any) => lt?.id),
-          }
-        })
+          };
+        });
       if (!user.other.tabKey) {
-        user.other.tabKey = arr?.[0]?.provider
+        user.other.tabKey = arr?.[0]?.provider;
       }
-      tabs.value = arr
+      tabs.value = arr;
     }
-  })
-}
+  });
+};
 
 watchEffect(() => {
   if (router.params.value?.other?.tabKey) {
-    user.other.tabKey = router.params.value?.other?.tabKey
+    user.other.tabKey = router.params.value?.other?.tabKey;
   }
   if (router.params?.value.row) {
-    if (
-      ['device-transparent-codec'].includes(
-        router.params?.value.row.topicProvider,
-      )
-    ) {
-      user.other.tabKey = 'system-business'
+    if (['device-transparent-codec'].includes(router.params?.value.row.topicProvider)) {
+      user.other.tabKey = 'system-business';
     }
     if (['system-event'].includes(router.params?.value.row.topicProvider)) {
-      user.other.tabKey = 'system-monitor'
+      user.other.tabKey = 'system-monitor';
     }
     if (
       [
@@ -86,13 +80,13 @@ watchEffect(() => {
         'workflow-task-transfer-todo',
       ].includes(router.params?.value.row.topicProvider)
     ) {
-      user.other.tabKey = 'workflow-notification'
+      user.other.tabKey = 'workflow-notification';
     }
   }
-})
+});
 
 onMounted(() => {
-  initData = getInitData()
-  queryTypeList()
-})
+  initData = getInitData();
+  queryTypeList();
+});
 </script>

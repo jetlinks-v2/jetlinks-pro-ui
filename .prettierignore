@@ -1,0 +1,13 @@
+**/*.svg
+dist/
+*.sh
+.gitignore
+.prettierignore
+.editorconfig
+**/assets
+.png
+.npmrc
+.huskyrc
+.gitmodules
+*.png
+

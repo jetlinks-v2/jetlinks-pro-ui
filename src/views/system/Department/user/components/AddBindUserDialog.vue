@@ -32,78 +32,78 @@
 </template>
 
 <script setup lang="ts">
-import { bindUser_api } from '@/api/system/department'
-import { useRequest } from '@jetlinks-web/hooks'
-import { onlyMessage } from '@jetlinks-web/utils'
-import { bindUserColumns, requestFun } from '../../util'
+import { bindUser_api } from '@/api/system/department';
+import { useRequest } from '@jetlinks-web/hooks';
+import { onlyMessage } from '@jetlinks-web/utils';
+import { bindUserColumns, requestFun } from '../../util';
 
-const emits = defineEmits(['save', 'close'])
+const emits = defineEmits(['save', 'close']);
 
 const props = defineProps({
   parentId: {
     type: String,
     default: '',
   },
-})
+});
 
-const queryParams = ref({})
-const _selectedRowKeys = ref<string[]>([])
+const queryParams = ref({});
+const _selectedRowKeys = ref<string[]>([]);
 
 // 保存数据
 const { loading, run } = useRequest(bindUser_api, {
   immediate: false,
   onSuccess(res) {
     if (res.success) {
-      onlyMessage('操作成功')
-      _selectedRowKeys.value = []
-      emits('save')
+      onlyMessage('操作成功');
+      _selectedRowKeys.value = [];
+      emits('save');
     }
   },
-})
+});
 
 const confirm = () => {
   if (_selectedRowKeys.value.length && props.parentId) {
-    run(props.parentId, _selectedRowKeys.value)
+    run(props.parentId, _selectedRowKeys.value);
   } else {
-    onlyMessage('请选择要绑定的用户', 'warning')
+    onlyMessage('请选择要绑定的用户', 'warning');
   }
-}
+};
 
 const cancelSelect = () => {
-  _selectedRowKeys.value = []
-}
+  _selectedRowKeys.value = [];
+};
 const onSelect = (record: any, selected: boolean) => {
-  const arr = [..._selectedRowKeys.value]
-  const _index = arr.findIndex((item) => item === record?.id)
+  const arr = [..._selectedRowKeys.value];
+  const _index = arr.findIndex(item => item === record?.id);
   if (selected) {
     if (!(_index > -1)) {
-      _selectedRowKeys.value.push(record.id)
+      _selectedRowKeys.value.push(record.id);
     }
   } else {
     if (_index > -1) {
       // 去掉数据
-      _selectedRowKeys.value.splice(_index, 1)
+      _selectedRowKeys.value.splice(_index, 1);
     }
   }
-}
+};
 const onSelectAll = (selected: boolean, _: any[], changeRows: any) => {
   if (selected) {
     changeRows.map((i: any) => {
       if (!_selectedRowKeys.value.includes(i.id)) {
-        _selectedRowKeys.value.push(i.id)
+        _selectedRowKeys.value.push(i.id);
       }
-    })
+    });
   } else {
-    const arr = changeRows.map((item: any) => item.id)
-    const _ids: string[] = []
-    ;[..._selectedRowKeys.value].map((i: any) => {
+    const arr = changeRows.map((item: any) => item.id);
+    const _ids: string[] = [];
+    [..._selectedRowKeys.value].map((i: any) => {
       if (!arr.includes(i)) {
-        _ids.push(i)
+        _ids.push(i);
       }
-    })
-    _selectedRowKeys.value = _ids
+    });
+    _selectedRowKeys.value = _ids;
   }
-}
+};
 
 // 请求数据
 const handleSearch = (oParams: any) =>
@@ -116,12 +116,12 @@ const handleSearch = (oParams: any) =>
         },
       ],
     },
-  ])
+  ]);
 
 //
 const onSearch = (e: any[]) => {
   queryParams.value = {
     terms: e,
-  }
-}
+  };
+};
 </script>

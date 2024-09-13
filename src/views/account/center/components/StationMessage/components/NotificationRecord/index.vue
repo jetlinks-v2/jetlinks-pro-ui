@@ -4,7 +4,7 @@
       :columns="columns"
       :target="type"
       style="padding: 0"
-      @search="(e) => (queryParams = e)"
+      @search="e => (queryParams = e)"
     />
     <j-pro-table
       ref="tableRef"
@@ -42,9 +42,7 @@
           <j-permission-button
             type="link"
             :popConfirm="{
-              title: `确认标为${
-                slotProps.state.value === 'read' ? '未读' : '已读'
-              }`,
+              title: `确认标为${slotProps.state.value === 'read' ? '未读' : '已读'}`,
               onConfirm: () => changeStatus(slotProps),
             }"
             :tooltip="{
@@ -65,38 +63,33 @@
         </a-space>
       </template>
     </j-pro-table>
-    <ViewDialog
-      v-if="viewVisible"
-      v-model:visible="viewVisible"
-      :data="viewItem"
-      :type="type"
-    />
+    <ViewDialog v-if="viewVisible" v-model:visible="viewVisible" :data="viewItem" :type="type" />
   </div>
 </template>
 
 <script setup lang="ts" name="NotificationRecord">
-import ViewDialog from './components/ViewDialog.vue'
-import { getList_api, changeStatus_api } from '@/api/account/notificationRecord'
-import dayjs from 'dayjs'
-import { useUserStore } from '@/store/user'
-import { useRouterParams } from '@jetlinks-web/hooks'
-import { getTypeList_api } from '@/api/account/notificationSubscription'
-import { onlyMessage } from '@jetlinks-web/utils'
+import ViewDialog from './components/ViewDialog.vue';
+import { getList_api, changeStatus_api } from '@/api/account/notificationRecord';
+import dayjs from 'dayjs';
+import { useUserStore } from '@/store/user';
+import { useRouterParams } from '@jetlinks-web/hooks';
+import { getTypeList_api } from '@/api/account/notificationSubscription';
+import { onlyMessage } from '@jetlinks-web/utils';
 
-const user = useUserStore()
+const user = useUserStore();
 
 const props = defineProps({
   type: {
     type: String,
     default: '',
   },
-})
+});
 
 const getType = computed(() => {
   if (props.type === 'system-business') {
-    return ['device-transparent-codec']
+    return ['device-transparent-codec'];
   } else if (props.type === 'system-monitor') {
-    return ['system-event']
+    return ['system-event'];
   } else if (props.type === 'workflow-notification') {
     return [
       'workflow-task-cc',
@@ -105,17 +98,11 @@ const getType = computed(() => {
       'workflow-process-finish',
       'workflow-process-repealed',
       'workflow-task-transfer-todo',
-    ]
+    ];
   } else {
-    return [
-      'alarm',
-      'alarm-product',
-      'alarm-device',
-      'alarm-other',
-      'alarm-org',
-    ]
+    return ['alarm', 'alarm-product', 'alarm-device', 'alarm-other', 'alarm-org'];
   }
-})
+});
 
 const columns = [
   {
@@ -133,11 +120,11 @@ const columns = [
               value: item.id,
             }))
             .filter((item: any) => {
-              return [...getType.value].includes(item?.value)
+              return [...getType.value].includes(item?.value);
             })
             .sort((a: any, b: any) => {
-              return b?.value?.length - a?.value?.length
-            })
+              return b?.value?.length - a?.value?.length;
+            });
         }),
     },
     scopedSlots: true,
@@ -192,12 +179,12 @@ const columns = [
     scopedSlots: true,
     width: '200px',
   },
-]
+];
 
-const viewVisible = ref<boolean>(false)
-const viewItem = ref<any>({})
+const viewVisible = ref<boolean>(false);
+const viewItem = ref<any>({});
 
-const routerParams = useRouterParams()
+const routerParams = useRouterParams();
 
 const defaultParams = {
   sorts: [{ name: 'notifyTime', order: 'desc' }],
@@ -213,35 +200,35 @@ const defaultParams = {
       type: 'and',
     },
   ],
-}
-const queryParams = ref({})
+};
+const queryParams = ref({});
 
-const tableRef = ref()
+const tableRef = ref();
 
 const view = (row: any) => {
-  viewItem.value = row
-  viewVisible.value = true
-}
+  viewItem.value = row;
+  viewVisible.value = true;
+};
 const refresh = () => {
-  tableRef.value && tableRef.value.reload()
-}
+  tableRef.value?.reload();
+};
 
 const changeStatus = (row: any) => {
-  const type = row.state.value === 'read' ? '_unread' : '_read'
+  const type = row.state.value === 'read' ? '_unread' : '_read';
   changeStatus_api(type, [row.id]).then((resp: any) => {
     if (resp.status === 200) {
-      onlyMessage('操作成功！')
-      refresh()
-      user.updateAlarm()
+      onlyMessage('操作成功！');
+      refresh();
+      user.updateAlarm();
     }
-  })
-}
+  });
+};
 
 watchEffect(() => {
   if (user.messageInfo?.id) {
-    view(user.messageInfo)
+    view(user.messageInfo);
   }
-})
+});
 
 // const onAllRead = async () => {
 //     const resp = await changeAllStatus('_read', getType.value);
@@ -254,13 +241,13 @@ watchEffect(() => {
 
 onMounted(() => {
   if (routerParams.params?.value.row) {
-    view(routerParams.params?.value.row)
+    view(routerParams.params?.value.row);
   }
-})
+});
 onUnmounted(() => {
-  user.messageInfo = {}
-  viewVisible.value = false
-})
+  user.messageInfo = {};
+  viewVisible.value = false;
+});
 </script>
 
 <style lang="less" scoped>

@@ -7,13 +7,16 @@
     :breadcrumb="{ routes: breadcrumb }"
     :pure="state.pure"
     :layoutType="layoutType"
-    @backClick='routerBack'
+    @backClick="routerBack"
   >
     <template #breadcrumbRender="slotProps">
-      <a v-if="slotProps.route.index !== 0 && !slotProps.route.isLast" @click="() => jumpPage(slotProps.route)" >
+      <a
+        v-if="slotProps.route.index !== 0 && !slotProps.route.isLast"
+        @click="() => jumpPage(slotProps.route)"
+      >
         {{ slotProps.route.breadcrumbName }}
       </a>
-      <span v-else style='cursor: default' >{{ slotProps.route.breadcrumbName }}</span>
+      <span v-else style="cursor: default">{{ slotProps.route.breadcrumbName }}</span>
     </template>
 
     <template #rightContentRender>
@@ -22,20 +25,20 @@
         <User />
       </div>
     </template>
-      <slot>
-        <router-view v-slot="{ Component }">
-          <component :is="components || Component" />
-        </router-view>
-      </slot>
+    <slot>
+      <router-view v-slot="{ Component }">
+        <component :is="components || Component" />
+      </router-view>
+    </slot>
   </j-pro-layout>
 </template>
 
 <script setup name="BasicLayoutPage" lang="ts">
-import { reactive, computed, watchEffect } from 'vue'
-import { useSystemStore } from '@/store/system'
-import { useMenuStore } from '@/store/menu'
-import { User, Notice } from './components'
-import { storeToRefs } from 'pinia'
+import { reactive, computed, watchEffect } from 'vue';
+import { useSystemStore } from '@/store/system';
+import { useMenuStore } from '@/store/menu';
+import { User, Notice } from './components';
+import { storeToRefs } from 'pinia';
 
 type StateType = {
   collapsed: boolean;
@@ -46,27 +49,26 @@ type StateType = {
 
 const router = useRouter();
 const route = useRoute();
-const systemStore = useSystemStore()
-const menuStore = useMenuStore()
-const layoutType = ref('list')
+const systemStore = useSystemStore();
+const menuStore = useMenuStore();
+const layoutType = ref('list');
 
-const { theme, layout } = storeToRefs(systemStore)
+const { theme, layout } = storeToRefs(systemStore);
 
 const components = computed(() => {
-  const componentName = route.matched[route.matched.length - 1]?.components?.default?.name
+  const componentName = route.matched[route.matched.length - 1]?.components?.default?.name;
   if (componentName !== 'BasicLayoutPage') {
-    return route.matched[route.matched.length - 1]?.components?.default
+    return route.matched[route.matched.length - 1]?.components?.default;
   }
-  return undefined
-})
-
+  return undefined;
+});
 
 const config = computed(() => ({
   ...layout.value,
   theme: theme.value,
   menuData: menuStore.siderMenus,
-  splitMenus: layout.value.layout === 'mix'
-}))
+  splitMenus: layout.value.layout === 'mix',
+}));
 
 const state = reactive<StateType>({
   pure: false,
@@ -78,57 +80,54 @@ const state = reactive<StateType>({
 /**
  * 面包屑
  */
-const breadcrumb = computed(() =>
-  {
-    const paths = router.currentRoute.value.matched
-    return paths.map((item, index) => {
-      return {
-        index,
-        isLast: index === (paths.length -1),
-        path: item.path,
-        breadcrumbName: (item.meta as any).title || '',
-      }
-    })
-  }
-);
+const breadcrumb = computed(() => {
+  const paths = router.currentRoute.value.matched;
+  return paths.map((item, index) => {
+    return {
+      index,
+      isLast: index === paths.length - 1,
+      path: item.path,
+      breadcrumbName: (item.meta as any).title || '',
+    };
+  });
+});
 
 /**
  * 路由跳转
  */
-const jumpPage = (route: { path: string}) => {
-  router.push(route.path)
-}
+const jumpPage = (route: { path: string }) => {
+  router.push(route.path);
+};
 
 const routerBack = () => {
-  router.go(-1)
-}
+  router.go(-1);
+};
 
 const init = () => {
   (window as any).microApp?.addDataListener((data: any) => {
     if (data.layoutType) {
-      layoutType.value = data.layoutType
+      layoutType.value = data.layoutType;
     }
-  }, true)
-}
+  }, true);
+};
 
-init()
+init();
 
 /**
  * 处理菜单选中，展开状态
  */
 watchEffect(() => {
   if (router.currentRoute) {
-    const paths = router.currentRoute.value.matched
-    state.selectedKeys = paths.map(item => item.path)
-    state.openKeys = paths.map(item => item.path)
+    const paths = router.currentRoute.value.matched;
+    state.selectedKeys = paths.map(item => item.path);
+    state.openKeys = paths.map(item => item.path);
     // console.log(paths) //
   }
   // if (route.query?.layout === 'false' || self.frameElement?.tagName === 'IFRAME') {
   if (route.query?.layout === 'false') {
-    state.pure = true
+    state.pure = true;
   }
-})
-
+});
 </script>
 
 <style scoped>

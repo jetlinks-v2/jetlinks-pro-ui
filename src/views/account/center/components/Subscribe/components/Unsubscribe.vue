@@ -1,11 +1,5 @@
 <template>
-  <a-modal
-    :maskClosable="false"
-    :width="'384px'"
-    visible
-    @cancel="emit('close')"
-    :footer="null"
-  >
+  <a-modal :maskClosable="false" :width="'384px'" visible @cancel="emit('close')" :footer="null">
     <template v-if="getType === 'notifier-dingTalk'">
       <div class="tip">请先绑定钉钉账号</div>
     </template>
@@ -41,12 +35,12 @@
 </template>
 
 <script lang="ts" setup>
-import { useUserStore } from '@/store/user'
-import EditInfo from '../../EditInfo/index.vue'
-import Bind from './Bind.vue'
+import { useUserStore } from '@/store/user';
+import EditInfo from '../../EditInfo/index.vue';
+import Bind from './Bind.vue';
 
-const user = useUserStore()
-const emit = defineEmits(['close', 'save'])
+const user = useUserStore();
+const emit = defineEmits(['close', 'save']);
 
 const props = defineProps({
   data: {
@@ -59,41 +53,40 @@ const props = defineProps({
     type: Object,
     default: () => {},
   },
-})
+});
 
-const editInfoVisible = ref<boolean>(false)
-const visible = ref<boolean>(false)
+const editInfoVisible = ref<boolean>(false);
+const visible = ref<boolean>(false);
 
 const getType = computed(() => {
-  return props.current?.channelProvider
-})
+  return props.current?.channelProvider;
+});
 
 const onBind = () => {
   if (!['notifier-dingTalk', 'notifier-weixin'].includes(getType.value)) {
-    editInfoVisible.value = true
+    editInfoVisible.value = true;
   } else {
-    visible.value = true
+    visible.value = true;
   }
-}
+};
 
 const onSave = (info: any) => {
-  editInfoVisible.value = false
-  user.getUserInfo()
+  editInfoVisible.value = false;
+  user.getUserInfo();
   if (
     (getType.value === 'notifier-email' && info.email) ||
-    (['notifier-voice', 'notifier-sms'].includes(getType.value) &&
-      info.telephone)
+    (['notifier-voice', 'notifier-sms'].includes(getType.value) && info.telephone)
   ) {
-    emit('save', props.current)
-    emit('close')
+    emit('save', props.current);
+    emit('close');
   }
-}
+};
 
 const onBindSave = (cur: any) => {
-  visible.value = false
-  emit('save', cur)
-  emit('close')
-}
+  visible.value = false;
+  emit('save', cur);
+  emit('close');
+};
 </script>
 
 <style lang="less" scoped>

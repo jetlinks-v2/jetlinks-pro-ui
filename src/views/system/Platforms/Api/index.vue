@@ -1,60 +1,44 @@
 <template>
   <div class="api-page-container">
     <div class="top">
-      <slot name="top"/>
+      <slot name="top" />
     </div>
-    <a-row class="content" :style="{padding:'24px'}">
-      <a-col
-          :span="24"
-          v-if="props.showTitle"
-          style="font-size: 16px;margin-bottom: 48px;"
-      >
+    <a-row class="content" :style="{ padding: '24px' }">
+      <a-col :span="24" v-if="props.showTitle" style="font-size: 16px; margin-bottom: 48px">
         API文档
       </a-col>
       <a-col :span="5" class="tree-content">
         <LeftTree
-            @select="treeSelect"
-            :mode="props.mode"
-            :has-home="props.hasHome"
-            :code="props.code"
+          @select="treeSelect"
+          :mode="props.mode"
+          :has-home="props.hasHome"
+          :code="props.code"
         />
       </a-col>
       <a-col :span="19">
-        <HomePage v-show="showHome"/>
+        <HomePage v-show="showHome" />
         <div class="url-page" v-show="!showHome">
           <ChooseApi
-              v-show="!selectedApi.url"
-              v-model:click-api="selectedApi"
-              v-model:selectedRowKeys="selectedKeys"
-              v-model:changedApis="changedApis"
-              :table-data="tableData"
-              :source-keys="selectSourceKeys"
-              :mode="props.mode"
-              @refresh="getSelectKeys"
+            v-show="!selectedApi.url"
+            v-model:click-api="selectedApi"
+            v-model:selectedRowKeys="selectedKeys"
+            v-model:changedApis="changedApis"
+            :table-data="tableData"
+            :source-keys="selectSourceKeys"
+            :mode="props.mode"
+            @refresh="getSelectKeys"
           />
 
-          <div
-              class="api-details"
-              v-if="selectedApi.url && tableData.length > 0"
-          >
-            <a-button
-                @click="selectedApi = initSelectedApi"
-                style="margin-bottom: 24px"
-            >返回
-            </a-button
-            >
+          <div class="api-details" v-if="selectedApi.url && tableData.length > 0">
+            <a-button @click="selectedApi = initSelectedApi" style="margin-bottom: 24px">
+              返回
+            </a-button>
             <a-tabs v-model:activeKey="activeKey" type="card">
               <a-tab-pane key="does" tab="文档">
-                <ApiDoes
-                    :select-api="selectedApi"
-                    :schemas="schemas"
-                />
+                <ApiDoes :select-api="selectedApi" :schemas="schemas" />
               </a-tab-pane>
               <a-tab-pane key="test" tab="调试">
-                <ApiTest
-                    :select-api="selectedApi"
-                    :schemas="schemas"
-                />
+                <ApiTest :select-api="selectedApi" :schemas="schemas" />
               </a-tab-pane>
             </a-tabs>
           </div>
@@ -66,18 +50,13 @@
 
 <script setup lang="ts" name="apiPage">
 import HomePage from './components/HomePage.vue';
-import {getApiGranted_api, apiOperations_api} from '@/api/system/apiPage';
-import type {
-  treeNodeTpye,
-  apiObjType,
-  apiDetailsType,
-  modeType,
-} from './typing';
+import { getApiGranted_api, apiOperations_api } from '@/api/system/apiPage';
+import type { treeNodeTpye, apiObjType, apiDetailsType, modeType } from './typing';
 import LeftTree from './components/LeftTree.vue';
 import ChooseApi from './components/ChooseApi.vue';
 import ApiDoes from './components/ApiDoes.vue';
 import ApiTest from './components/ApiTest.vue';
-import {useDepartmentStore} from '@/store/department';
+import { useDepartmentStore } from '@/store/department';
 
 const department = useDepartmentStore();
 
@@ -97,8 +76,8 @@ const treeSelect = (node: treeNodeTpye, nodeSchemas: object = {}) => {
   const apiList: apiObjType[] = node.apiList as apiObjType[];
   const table: any = [];
   // 将对象形式的数据转换为表格需要的形式
-  apiList?.forEach((apiItem) => {
-    const {method, url} = apiItem as any;
+  apiList?.forEach(apiItem => {
+    const { method, url } = apiItem as any;
     for (const key in method) {
       if (Object.prototype.hasOwnProperty.call(method, key)) {
         table.push({
@@ -138,8 +117,8 @@ function init() {
     selectedApi.value = initSelectedApi;
   });
   watch(
-      () => selectedApi.value.url,
-      () => (activeKey.value = 'does'),
+    () => selectedApi.value.url,
+    () => (activeKey.value = 'does'),
   );
 }
 
@@ -148,13 +127,13 @@ function init() {
  */
 function getSelectKeys() {
   if (props.mode === 'appManger') {
-    getApiGranted_api(props.code as string).then((resp) => {
+    getApiGranted_api(props.code as string).then(resp => {
       selectedKeys.value = resp.result as string[];
       selectSourceKeys.value = [...(resp.result as string[])];
       changedApis.value = {};
     });
   } else if (props.mode === 'api') {
-    apiOperations_api().then((resp) => {
+    apiOperations_api().then(resp => {
       selectedKeys.value = resp.result as string[];
       selectSourceKeys.value = [...(resp.result as string[])];
     });
@@ -162,18 +141,18 @@ function getSelectKeys() {
 }
 
 watch(
-    () => selectedKeys.value,
-    (val: any) => {
-      // console.log('selectedKeys: ', val);
-      department.setSelectedKeys(val);
-    },
+  () => selectedKeys.value,
+  (val: any) => {
+    // console.log('selectedKeys: ', val);
+    department.setSelectedKeys(val);
+  },
 );
 watch(
-    () => changedApis.value,
-    (val: any) => {
-      // console.log('changedApis: ', val);
-      department.setChangedApis(val);
-    },
+  () => changedApis.value,
+  (val: any) => {
+    // console.log('changedApis: ', val);
+    department.setChangedApis(val);
+  },
 );
 </script>
 

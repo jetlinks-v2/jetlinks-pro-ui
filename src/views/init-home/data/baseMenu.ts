@@ -1,13 +1,10 @@
-import {
-  USER_CENTER_MENU_BUTTON_CODE,
-  USER_CENTER_MENU_CODE
-} from '@/utils/consts'
+import { USER_CENTER_MENU_BUTTON_CODE, USER_CENTER_MENU_CODE } from '@/utils/consts';
 
-const modulesFiles = import.meta.glob('/src/modules/*/baseMenu.ts', { eager: true})
+const modulesFiles = import.meta.glob('/src/modules/*/baseMenu.ts', { eager: true });
 
 export const USER_CENTER_MENU_DATA = {
   id: '19a1f2c763e1231f1e1',
-  accessSupport: { value: 'unsupported', label: '不支持'},
+  accessSupport: { value: 'unsupported', label: '不支持' },
   supportDataAccess: false,
   code: USER_CENTER_MENU_CODE,
   name: '个人中心',
@@ -28,9 +25,7 @@ export const USER_CENTER_MENU_DATA = {
     {
       id: 'view',
       name: '查看',
-      permissions: [
-
-      ]
+      permissions: [],
     },
     {
       id: USER_CENTER_MENU_BUTTON_CODE,
@@ -38,35 +33,34 @@ export const USER_CENTER_MENU_DATA = {
       permissions: [
         {
           permission: 'user',
-          actions: ['update-self-pwd']
+          actions: ['update-self-pwd'],
         },
         {
           permission: 'system_config',
           actions: ['query'],
         },
-      ]
-    }
-  ]
-}
-
+      ],
+    },
+  ],
+};
 
 const mergeMenuChildrenByCode = (source: any[], target: any[]) => {
   source.forEach(sourceItem => {
-    const item = target.find(targetItem => targetItem.code === sourceItem.code)
+    const item = target.find(targetItem => targetItem.code === sourceItem.code);
 
     if (item) {
       if (item.children) {
         item.children = mergeMenuChildrenByCode(sourceItem.children, item.children)
-            .sort((a,b) => a.sortIndex - b.sortIndex)
-            .map((mergeItem, index) => ({ ...mergeItem, sortIndex: index + 1}))
+          .sort((a, b) => a.sortIndex - b.sortIndex)
+          .map((mergeItem, index) => ({ ...mergeItem, sortIndex: index + 1 }));
       }
     } else {
-      target.push(sourceItem)
+      target.push(sourceItem);
     }
-  })
+  });
 
-  return target
-}
+  return target;
+};
 
 export const getModulesBaseMenu = () => {
   let baseMenu = [
@@ -119,8 +113,8 @@ export const getModulesBaseMenu = () => {
               ],
             },
           ],
-          accessSupport: { text: "不支持", value: "unsupported" },
-          supportDataAccess: false
+          accessSupport: { text: '不支持', value: 'unsupported' },
+          supportDataAccess: false,
         },
         {
           code: 'system/User',
@@ -209,9 +203,9 @@ export const getModulesBaseMenu = () => {
               ],
             },
           ],
-          accessSupport: { text: "支持", value: "support" },
+          accessSupport: { text: '支持', value: 'support' },
           supportDataAccess: true,
-          assetType: 'user'
+          assetType: 'user',
         },
         {
           code: 'system/Department',
@@ -408,9 +402,9 @@ export const getModulesBaseMenu = () => {
               ],
             },
           ],
-          accessSupport: { text: "支持", value: "support" },
+          accessSupport: { text: '支持', value: 'support' },
           supportDataAccess: true,
-          assetType: 'organization'
+          assetType: 'organization',
         },
         {
           code: 'system/Role',
@@ -485,8 +479,8 @@ export const getModulesBaseMenu = () => {
                 },
                 {
                   permission: 'role-group',
-                  actions: ['query']
-                }
+                  actions: ['query'],
+                },
               ],
             },
             {
@@ -495,8 +489,8 @@ export const getModulesBaseMenu = () => {
               permissions: [
                 {
                   permission: 'role-group',
-                  actions: ['query','save']
-                }
+                  actions: ['query', 'save'],
+                },
               ],
             },
             {
@@ -505,14 +499,14 @@ export const getModulesBaseMenu = () => {
               permissions: [
                 {
                   permission: 'role-group',
-                  actions: ['query','delete']
-                }
+                  actions: ['query', 'delete'],
+                },
               ],
             },
           ],
-          accessSupport: { text: "支持", value: "support" },
+          accessSupport: { text: '支持', value: 'support' },
           supportDataAccess: true,
-          assetType: 'role'
+          assetType: 'role',
         },
         {
           code: 'system/Menu',
@@ -595,8 +589,8 @@ export const getModulesBaseMenu = () => {
               ],
             },
           ],
-          accessSupport: { text: "不支持", value: "unsupported" },
-          supportDataAccess: false
+          accessSupport: { text: '不支持', value: 'unsupported' },
+          supportDataAccess: false,
         },
         {
           code: 'system/Permission',
@@ -685,8 +679,8 @@ export const getModulesBaseMenu = () => {
               ],
             },
           ],
-          accessSupport: { text: "不支持", value: "unsupported" },
-          supportDataAccess: false
+          accessSupport: { text: '不支持', value: 'unsupported' },
+          supportDataAccess: false,
         },
         {
           code: 'system/Platforms/Setting',
@@ -734,8 +728,8 @@ export const getModulesBaseMenu = () => {
               ],
             },
           ],
-          accessSupport: { text: "不支持", value: "unsupported" },
-          supportDataAccess: false
+          accessSupport: { text: '不支持', value: 'unsupported' },
+          supportDataAccess: false,
         },
         {
           code: 'system/Apply',
@@ -828,8 +822,8 @@ export const getModulesBaseMenu = () => {
               ],
             },
           ],
-          accessSupport: { text: "不支持", value: "unsupported" },
-          supportDataAccess: false
+          accessSupport: { text: '不支持', value: 'unsupported' },
+          supportDataAccess: false,
         },
         {
           code: 'system/NoticeRule',
@@ -931,8 +925,8 @@ export const getModulesBaseMenu = () => {
               ],
             },
           ],
-          accessSupport: { text: "不支持", value: "unsupported" },
-          supportDataAccess: false
+          accessSupport: { text: '不支持', value: 'unsupported' },
+          supportDataAccess: false,
         },
         {
           code: 'system/Dictionary',
@@ -946,80 +940,68 @@ export const getModulesBaseMenu = () => {
           permissions: [],
           buttons: [
             {
-              id: "add",
-              name: "新增",
+              id: 'add',
+              name: '新增',
               permissions: [
                 {
-                  permission: "dictionary",
-                  actions: [
-                    "save"
-                  ]
-                }
-              ]
+                  permission: 'dictionary',
+                  actions: ['save'],
+                },
+              ],
             },
             {
-              id: "delete",
-              name: "删除",
+              id: 'delete',
+              name: '删除',
               permissions: [
                 {
-                  permission: "dictionary",
-                  actions: [
-                    "delete"
-                  ]
-                }
-              ]
+                  permission: 'dictionary',
+                  actions: ['delete'],
+                },
+              ],
             },
             {
-              id: "update",
-              name: "编辑",
+              id: 'update',
+              name: '编辑',
               permissions: [
                 {
-                  permission: "dictionary",
-                  actions: [
-                    "save"
-                  ]
-                }
-              ]
+                  permission: 'dictionary',
+                  actions: ['save'],
+                },
+              ],
             },
             {
-              id: "import",
-              name: "导入",
+              id: 'import',
+              name: '导入',
               permissions: [
                 {
-                  permission: "dictionary",
-                  actions: [
-                    "save"
-                  ]
-                }
-              ]
+                  permission: 'dictionary',
+                  actions: ['save'],
+                },
+              ],
             },
             {
-              id: "down",
-              name: "下载",
+              id: 'down',
+              name: '下载',
               permissions: [
                 {
-                  permission: "dictionary",
-                  actions: [
-                    "query"
-                  ]
-                }
-              ]
+                  permission: 'dictionary',
+                  actions: ['query'],
+                },
+              ],
             },
             {
-              id: "action",
-              name: "启用/禁用",
+              id: 'action',
+              name: '启用/禁用',
               permissions: [
                 {
-                  permission: "dictionary",
-                  actions: [
-                    "save"
-                  ]
-                }
-              ]
-            }
+                  permission: 'dictionary',
+                  actions: ['save'],
+                },
+              ],
+            },
           ],
-          accessSupport: { text: "不支持", value: "unsupported" },
-          supportDataAccess: false
+          accessSupport: { text: '不支持', value: 'unsupported' },
+          supportDataAccess: false,
         },
         {
           code: 'system/Region',
@@ -1033,102 +1015,88 @@ export const getModulesBaseMenu = () => {
           permissions: [],
           buttons: [
             {
-              id: "add",
-              name: "新增",
+              id: 'add',
+              name: '新增',
               permissions: [
                 {
-                  permission: "area",
-                  actions: [
-                    "save"
-                  ]
-                }
-              ]
+                  permission: 'area',
+                  actions: ['save'],
+                },
+              ],
             },
             {
-              id: "delete",
-              name: "删除",
+              id: 'delete',
+              name: '删除',
               permissions: [
                 {
-                  permission: "area",
-                  actions: [
-                    "delete"
-                  ]
-                }
-              ]
+                  permission: 'area',
+                  actions: ['delete'],
+                },
+              ],
             },
             {
-              id: "update",
-              name: "编辑",
+              id: 'update',
+              name: '编辑',
               permissions: [
                 {
-                  permission: "area",
-                  actions: [
-                    "save"
-                  ]
-                }
-              ]
+                  permission: 'area',
+                  actions: ['save'],
+                },
+              ],
             },
           ],
-          accessSupport: { text: "不支持", value: "unsupported" },
-          supportDataAccess: false
+          accessSupport: { text: '不支持', value: 'unsupported' },
+          supportDataAccess: false,
         },
         {
           code: 'system/Calendar',
           name: '日历维护',
           owner: 'iot',
           id: '9d03fb403f3edb4ceb796dd81167562f',
-          showPage: ["calendar-manager"],
+          showPage: ['calendar-manager'],
           sortIndex: 14,
           url: '/system/Calendar',
           icon: 'icon-rili',
           permissions: [
             {
-              permission: "calendar-manager",
-              actions: [
-                "query",
-              ]
-            }
+              permission: 'calendar-manager',
+              actions: ['query'],
+            },
           ],
           buttons: [
             {
-              id: "add",
-              name: "新增",
+              id: 'add',
+              name: '新增',
               permissions: [
                 {
-                  permission: "calendar-manager",
-                  actions: [
-                    "save"
-                  ]
-                }
-              ]
+                  permission: 'calendar-manager',
+                  actions: ['save'],
+                },
+              ],
             },
             {
-              id: "update",
-              name: "编辑",
+              id: 'update',
+              name: '编辑',
               permissions: [
                 {
-                  permission: "calendar-manager",
-                  actions: [
-                    "save"
-                  ]
-                }
-              ]
+                  permission: 'calendar-manager',
+                  actions: ['save'],
+                },
+              ],
             },
             {
-              id: "delete",
-              name: "删除",
+              id: 'delete',
+              name: '删除',
               permissions: [
                 {
-                  permission: "calendar-manager",
-                  actions: [
-                    "delete"
-                  ]
-                }
-              ]
-            }
+                  permission: 'calendar-manager',
+                  actions: ['delete'],
+                },
+              ],
+            },
           ],
-          accessSupport: { text: "不支持", value: "unsupported" },
-          supportDataAccess: false
+          accessSupport: { text: '不支持', value: 'unsupported' },
+          supportDataAccess: false,
         },
       ],
     },
@@ -1174,20 +1142,19 @@ export const getModulesBaseMenu = () => {
                 },
               ],
               buttons: [],
-              accessSupport: { text: "不支持", value: "unsupported" },
-              supportDataAccess: false
+              accessSupport: { text: '不支持', value: 'unsupported' },
+              supportDataAccess: false,
             },
-          ]
-        }
-      ]
-    }
+          ],
+        },
+      ],
+    },
   ];
 
   Object.keys(modulesFiles).forEach(key => {
-    const menus = (modulesFiles[key] as any).default
-    baseMenu = mergeMenuChildrenByCode(menus, baseMenu)
-  })
+    const menus = (modulesFiles[key] as any).default;
+    baseMenu = mergeMenuChildrenByCode(menus, baseMenu);
+  });
 
-
-  return baseMenu.sort((a, b) => a.sortIndex - b.sortIndex)
-}
+  return baseMenu.sort((a, b) => a.sortIndex - b.sortIndex);
+};

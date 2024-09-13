@@ -1,10 +1,6 @@
 <template>
   <j-page-container>
-    <pro-search
-      :columns="columns"
-      target="system-permission"
-      @search="handleSearch"
-    />
+    <pro-search :columns="columns" target="system-permission" @search="handleSearch" />
     <FullPage>
       <j-pro-table
         ref="tableRef"
@@ -24,7 +20,8 @@
               :hasPermission="`${permission}:add`"
               @click="openDialog()"
             >
-              <AIcon type="PlusOutlined" />新增
+              <AIcon type="PlusOutlined" />
+              新增
             </j-permission-button>
             <a-dropdown trigger="hover">
               <a-button>批量操作</a-button>
@@ -96,9 +93,7 @@
                 title: slotProps.status ? '禁用' : '启用',
               }"
             >
-              <AIcon
-                :type="slotProps.status ? 'StopOutlined' : 'PlayCircleOutlined'"
-              />
+              <AIcon :type="slotProps.status ? 'StopOutlined' : 'PlayCircleOutlined'" />
             </j-permission-button>
             <j-permission-button
               :hasPermission="`${permission}:delete`"
@@ -126,102 +121,102 @@
 </template>
 
 <script setup lang="ts" name="Permission">
-import EditDialog from './components/EditDialog.vue'
+import EditDialog from './components/EditDialog.vue';
 import {
   getPermission_api,
   editPermission_api,
   delPermission_api,
   exportPermission_api,
-} from '@/api/system/permission'
-import { usePermission } from '@jetlinks-web/hooks'
-import { PermissionItem } from './typings'
-import { onlyMessage } from '@jetlinks-web/utils'
-import { downloadJson } from '@/utils/comm'
-import { columns } from './util'
+} from '@/api/system/permission';
+import { usePermission } from '@jetlinks-web/hooks';
+import { onlyMessage } from '@jetlinks-web/utils';
+import { downloadJson } from '@/utils/comm';
+import { columns } from './util';
 
-const permission = 'system/Permission'
-const { hasPerm } = usePermission(`${permission}:import`)
+const permission = 'system/Permission';
+const { hasPerm } = usePermission(`${permission}:import`);
 
-const params = ref<any>({})
-const visible = ref<boolean>(false)
-const current = ref<Partial<PermissionItem>>({})
-const tableRef = ref<any>({})  // 表格实例
+const params = ref<any>({});
+const visible = ref<boolean>(false);
+const current = ref<any>({});
+const tableRef = ref<any>({}); // 表格实例
 
 // 搜索
 const handleSearch = (e: any) => {
-  params.value = e
-}
+  params.value = e;
+};
 
 // 打开编辑弹窗
-const openDialog = (row?: PermissionItem) => {
-  current.value = { ...row }
-  visible.value = true
-}
+const openDialog = (row?: any) => {
+  current.value = { ...row };
+  visible.value = true;
+};
 
 // 导入数据
 const clickImport = (file: File) => {
   if (file.type === 'application/json') {
-    const reader = new FileReader()
-    reader.readAsText(file)
+    const reader = new FileReader();
+    reader.readAsText(file);
     reader.onload = (result: any) => {
       try {
-        const data = JSON.parse(result.target.result)
-        editPermission_api(data).then((resp) => {
+        const data = JSON.parse(result.target.result);
+        editPermission_api(data).then(resp => {
           if (resp.status === 200) {
-            onlyMessage('导入成功')
-            tableRef.value?.reload()
+            onlyMessage('导入成功');
+            tableRef.value?.reload();
           }
-        })
+        });
       } catch (error) {
-        onlyMessage('导入失败，请重试！', 'error')
+        console.warn(error);
+        onlyMessage('导入失败，请重试！', 'error');
       }
-    }
-  } else onlyMessage('请上传json格式', 'error')
-  return false
-}
+    };
+  } else onlyMessage('请上传json格式', 'error');
+  return false;
+};
 
 // 导出数据
 const clickExport = () => {
   const _params = {
     paging: false,
     ...params.value,
-  }
-  exportPermission_api(_params).then((resp) => {
+  };
+  exportPermission_api(_params).then(resp => {
     if (resp.status === 200) {
-      downloadJson(resp.result as any, '权限数据')
-      onlyMessage('导出成功')
+      downloadJson(resp.result as any, '权限数据');
+      onlyMessage('导出成功');
     } else {
-      onlyMessage('导出错误', 'error')
+      onlyMessage('导出错误', 'error');
     }
-  })
-}
+  });
+};
 
 // 修改状态
-const changeStatus = (row: PermissionItem) => {
+const changeStatus = (row: any) => {
   const _params = {
     ...row,
     status: row.status ? 0 : 1,
-  }
+  };
   editPermission_api(_params).then(() => {
-    onlyMessage('操作成功')
-    tableRef.value.reload()
-  })
-}
+    onlyMessage('操作成功');
+    tableRef.value.reload();
+  });
+};
 
 // 删除
-const clickDel = (row: PermissionItem) => {
-  if(!row.id) return;
+const clickDel = (row: any) => {
+  if (!row.id) return;
   delPermission_api(row.id).then((resp: any) => {
     if (resp.status === 200) {
-      tableRef.value?.reload()
-      onlyMessage('操作成功!')
+      tableRef.value?.reload();
+      onlyMessage('操作成功!');
     }
-  })
-}
+  });
+};
 
 // 关闭并刷新弹窗
 const onSave = () => {
-  visible.value = false
-  tableRef.value?.reload()
-}
+  visible.value = false;
+  tableRef.value?.reload();
+};
 </script>
