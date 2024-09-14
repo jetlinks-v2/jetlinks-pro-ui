@@ -3,7 +3,6 @@ dist/
 *.sh
 .gitignore
 .prettierignore
-.editorconfig
 **/assets
 .png
 .npmrc
