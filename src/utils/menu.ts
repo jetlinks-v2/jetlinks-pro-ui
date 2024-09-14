@@ -73,7 +73,7 @@ const findComponents = (
   return undefined;
 };
 
-const hasExtraChildren = (item: MenuItem, extraMenus: any) => {
+const hasExtraChildren = (item: MenuItem, extraMenus: any) => {：
   const extraItem = extraMenus[item.code];
 
   if (!extraItem) return undefined;

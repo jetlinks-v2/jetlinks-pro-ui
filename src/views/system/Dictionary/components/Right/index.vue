@@ -84,7 +84,7 @@ import { cloneDeep } from 'lodash-es';
 const props = defineProps({
   data: {
     type: Object,
-    default: () => {},
+    default: () => ({}),
   },
 });
 const params = ref();

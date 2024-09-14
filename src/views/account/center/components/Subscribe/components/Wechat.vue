@@ -9,7 +9,7 @@ import { createScript } from '@/utils/document';
 const props = defineProps({
   data: {
     type: Object,
-    default: () => {},
+    default: () => ({}),
   },
 });
 const timer = ref<any>(null);

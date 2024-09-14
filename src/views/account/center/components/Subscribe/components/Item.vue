@@ -53,11 +53,11 @@ const user = useUserStore();
 const props = defineProps({
   data: {
     type: Object,
-    default: () => {},
+    default: () => ({}),
   },
   subscribe: {
     type: Object,
-    default: () => {},
+    default: () => ({}),
   },
 });
 

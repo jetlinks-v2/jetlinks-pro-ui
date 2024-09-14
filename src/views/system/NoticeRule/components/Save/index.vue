@@ -136,7 +136,7 @@ const emit = defineEmits(['close', 'save']);
 const props = defineProps({
   data: {
     type: Object,
-    default: () => {},
+    default: () => ({}),
   },
   loading: {
     type: Boolean,

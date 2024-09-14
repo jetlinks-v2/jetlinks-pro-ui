@@ -138,7 +138,7 @@ const formRef = ref<any>();
 const props = defineProps({
   value: {
     type: Object,
-    default: () => {},
+    default: () => ({}),
   },
 });
 

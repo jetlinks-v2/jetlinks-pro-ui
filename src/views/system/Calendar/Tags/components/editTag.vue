@@ -55,7 +55,7 @@ const props = defineProps({
   },
   editData: {
     type: Object,
-    default: () => {},
+    default: () => ({}),
   },
 });
 const emit = defineEmits(['closeEditTag', 'refresh']);

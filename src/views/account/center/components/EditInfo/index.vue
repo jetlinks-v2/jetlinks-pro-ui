@@ -92,7 +92,7 @@ const emits = defineEmits(['save', 'close']);
 const props = defineProps({
   data: {
     type: Object,
-    default: () => {},
+    default: () => ({}),
   },
 });
 const loading = ref(false);

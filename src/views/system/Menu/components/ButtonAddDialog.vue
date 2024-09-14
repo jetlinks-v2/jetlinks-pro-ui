@@ -83,7 +83,7 @@ const emits = defineEmits(['save', 'close']);
 const props = defineProps({
   menuInfo: {
     type: Object,
-    default: () => {},
+    default: () => ({}),
   },
   mode: {
     type: String as PropType<'查看' | '新增' | '编辑'>,
@@ -91,7 +91,7 @@ const props = defineProps({
   },
   data: {
     type: Object,
-    default: () => {},
+    default: () => ({}),
   },
 });
 

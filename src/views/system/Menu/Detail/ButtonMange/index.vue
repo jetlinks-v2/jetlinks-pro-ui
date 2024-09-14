@@ -101,7 +101,7 @@ const permission = 'system/Menu';
 const props = defineProps({
   value: {
     type: Object,
-    default: () => {},
+    default: () => ({}),
   },
 });
 

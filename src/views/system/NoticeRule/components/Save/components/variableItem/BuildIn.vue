@@ -65,7 +65,7 @@ const props = defineProps({
   },
   item: {
     type: Object,
-    default: () => {},
+    default: () => ({}),
   },
   name: {
     type: Number,

@@ -78,7 +78,7 @@ import { getAssetsType, getMenuTree } from '@/api/system/menu';
 const props = defineProps({
   value: {
     type: Object,
-    default: () => {},
+    default: () => ({}),
   },
 });
 

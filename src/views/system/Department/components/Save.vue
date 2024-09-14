@@ -65,7 +65,7 @@ const props = defineProps({
   },
   data: {
     type: Object,
-    default: () => {},
+    default: () => ({}),
   },
 });
 // 弹窗相关

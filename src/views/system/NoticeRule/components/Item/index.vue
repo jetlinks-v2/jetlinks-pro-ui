@@ -123,7 +123,7 @@ import { useUserStore } from '@/store/user';
 const props = defineProps({
   data: {
     type: Object,
-    default: () => {},
+    default: () => ({}),
   },
   isLast: {
     type: Boolean,

@@ -53,7 +53,7 @@ import { getRoleList_api } from '@/api/system/user';
 const props = defineProps({
   data: {
     type: Object,
-    default: () => {},
+    default: () => ({}),
   },
 });
 const emit = defineEmits(['close', 'save']);

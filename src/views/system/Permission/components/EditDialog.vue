@@ -96,7 +96,7 @@ const emits = defineEmits(['save', 'close']);
 const props = defineProps({
   data: {
     type: Object as PropType<any>,
-    default: () => {},
+    default: () => ({}),
   },
 });
 

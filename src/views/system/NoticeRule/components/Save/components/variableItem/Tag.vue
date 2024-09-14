@@ -14,7 +14,7 @@ import TemplateApi from '@/api/notice/template';
 const props = defineProps({
   notify: {
     type: Object,
-    default: () => {},
+    default: () => ({}),
   },
   value: {
     type: String,

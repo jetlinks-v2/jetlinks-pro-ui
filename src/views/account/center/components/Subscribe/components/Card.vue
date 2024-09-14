@@ -81,12 +81,12 @@ const props = defineProps({
   data: {
     // 外层数据
     type: Object,
-    default: () => {},
+    default: () => ({}),
   },
   current: {
     // 当前的通道
     type: Object,
-    default: () => {},
+    default: () => ({}),
   },
   notifyChannels: {
     type: Array,

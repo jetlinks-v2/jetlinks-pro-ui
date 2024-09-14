@@ -48,7 +48,7 @@ const props = defineProps({
   },
   data: {
     type: Object,
-    default: () => {},
+    default: () => ({}),
   },
 });
 const emit = defineEmits(['closeSave', 'success']);

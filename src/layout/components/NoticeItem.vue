@@ -53,7 +53,7 @@ const emits = defineEmits(['action', 'refresh']);
 const props = defineProps({
   data: {
     type: Object,
-    default: () => {},
+    default: () => ({}),
   },
   type: {
     type: String,
