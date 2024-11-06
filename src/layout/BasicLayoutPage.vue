@@ -28,11 +28,13 @@
         </a-space>
       </div>
     </template>
-    <slot>
-      <router-view v-slot="{ Component }">
-        <component :is="components || Component" />
-      </router-view>
-    </slot>
+    <template v-if="routerAlive.router">
+      <slot>
+        <router-view v-slot="{ Component }">
+          <component :is="components || Component" />
+        </router-view>
+      </slot>
+    </template>
   </j-pro-layout>
 </template>
 
@@ -57,8 +59,8 @@ const menuStore = useMenuStore();
 const layoutType = ref('list');
 const routerAlive = reactive({
   router: true,
-  notice: true
-})
+  notice: true,
+});
 
 const { theme, layout } = storeToRefs(systemStore);
 
@@ -114,25 +116,27 @@ const routerBack = () => {
  * 组织切换，刷新路由
  */
 const changeRouterAlive = () => {
-  routerAlive.notice = true
+  routerAlive.notice = true;
 
-  const matched = route.matched
-  const matchedLength = route.matched.length
-  const prevComponentName = matchedLength - 2 >= 0 ? matched[matchedLength - 2]?.components?.default?.name || '' : ''
+  const matched = route.matched;
+  const matchedLength = route.matched.length;
+  const prevComponentName =
+    matchedLength - 2 >= 0 ? matched[matchedLength - 2]?.components?.default?.name || '' : '';
 
-  const jumpBack = !['BasicLayoutPage', 'BlankLayoutPage'].includes(prevComponentName)
+  // 判断component的name是否为BasicLayoutPage, BlankLayoutPage，也可以自行判断需要刷新的路由菜单
+  const jumpBack = !['BasicLayoutPage', 'BlankLayoutPage'].includes(prevComponentName);
 
   if (jumpBack) {
-    routerBack()
+    routerBack();
   } else {
-    routerAlive.router = false
+    routerAlive.router = false;
   }
 
   nextTick(() => {
-    routerAlive.router = true
-    routerAlive.notice = true
-  })
-}
+    routerAlive.router = true;
+    routerAlive.notice = true;
+  });
+};
 
 const init = () => {
   (window as any).microApp?.addDataListener((data: any) => {

@@ -46,3 +46,5 @@ export const userDetail = () => request.get<any>('/user/detail');
  * @returns
  */
 export const getInitSet = () => request.get(`/user/settings/init`);
+
+export const changeToken = (data: any) => request.post('/token', data);
