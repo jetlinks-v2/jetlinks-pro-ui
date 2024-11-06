@@ -28,7 +28,8 @@ export default [
       prettier: prettier
     },
     rules: {
-      'prettier/prettier': 'error',
+      'linebreak-style': 'off',
+      'prettier/prettier': ['error', { endOfLine: 'auto'}],
       'no-console': 'off',
       'no-restricted-globals': 'off',
       'no-restricted-syntax': 'off',

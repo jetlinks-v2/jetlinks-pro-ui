@@ -164,6 +164,7 @@ const submit = data => {
     _formData.encryptId = _encrypt.id;
   }
   run(_formData);
+  localStorage.setItem('expires', _formData.expires)
 };
 
 watch(
