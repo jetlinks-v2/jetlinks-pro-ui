@@ -1,6 +1,6 @@
 import { notification } from 'ant-design-vue';
 import { Observable } from 'rxjs';
-import { BASE_API, TOKEN_KEY } from '@jetlinks-web/constants';
+import { BASE_API, TOKEN_KEY_URL } from '@jetlinks-web/constants';
 import { getToken } from '@jetlinks-web/utils';
 
 let webSocketUrl = '';
@@ -102,7 +102,7 @@ export const initWebSocket = () => {
 
   const protocol = window.location.protocol === 'https' ? 'wss://' : 'ws://';
   const host = document.location.host;
-  webSocketUrl = `${protocol}${host}${BASE_API}/messaging/${token}?:${TOKEN_KEY}=${token}`;
+  webSocketUrl = `${protocol}${host}${BASE_API}/messaging/${token}?${TOKEN_KEY_URL}=${token}`;
 };
 
 export const initWebSocketInstance = () => {

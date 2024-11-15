@@ -28,6 +28,14 @@ export const USER_CENTER_MENU_DATA = {
       permissions: [],
     },
     {
+      id: 'org',
+      name: '组织切换',
+      permissions: [{
+        actions: ["query"],
+        permission: "organization"
+      }],
+    },
+    {
       id: USER_CENTER_MENU_BUTTON_CODE,
       name: '修改密码',
       permissions: [
@@ -39,6 +47,7 @@ export const USER_CENTER_MENU_DATA = {
           permission: 'system_config',
           actions: ['query'],
         },
+
       ],
     },
   ],

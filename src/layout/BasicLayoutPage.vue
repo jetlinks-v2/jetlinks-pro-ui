@@ -22,7 +22,7 @@
     <template #rightContentRender>
       <div class="right-content">
         <a-space :size="24">
-          <OrgList @change="changeRouterAlive" />
+          <OrgList v-if="showOrg" @change="changeRouterAlive" />
           <Notice v-if="routerAlive.notice" />
           <User />
         </a-space>
@@ -42,6 +42,7 @@
 import { reactive, computed, watchEffect } from 'vue';
 import { useSystemStore } from '@/store/system';
 import { useMenuStore } from '@/store/menu';
+import { useAuthStore } from '@/store/auth';
 import { User, Notice, OrgList } from './components';
 import { storeToRefs } from 'pinia';
 
@@ -56,11 +57,16 @@ const router = useRouter();
 const route = useRoute();
 const systemStore = useSystemStore();
 const menuStore = useMenuStore();
+const authStore = useAuthStore();
 const layoutType = ref('list');
 const routerAlive = reactive({
   router: true,
   notice: true,
 });
+
+const showOrg = computed(() => {
+  return authStore.permissions['account-center']?.includes('org')
+})
 
 const { theme, layout } = storeToRefs(systemStore);
 
